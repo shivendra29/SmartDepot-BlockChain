@@ -4,26 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-
-    <link rel="stylesheet" type="text/css" href="main.css">
+    <title>Smart Depot</title>
+    <link rel="icon" type="image/png" href="images/icons/hello.ico"/>
 
     <script src="./node_modules/web3/dist/web3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+<!-- =============================================================================================== -->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!-- =============================================================================================== -->
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!-- =============================================================================================== -->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!-- =============================================================================================== -->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!-- =============================================================================================== -->
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!-- ============================================================================================== -->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
 
 </head>
 <body>
-	<div class="container">
+<!--	<div class="container"> 
 
-        <h1>Warehouse Storage</h1>
-        <span id="countIns"></span>
+		<h1>Smart Depot</h1>
+		
+-->
+        
+        <!-- <hr> -->
 
-        <h2 id="instructor"></h2>
-        <span id="insTrans"></span>
-        <hr>
-
-        <img id="loader" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif">
-
-        <label for="fName" class="col-lg-2 control-label">First Name</label>
+       <!-- <label for="fName" class="col-lg-2 control-label">First Name</label>
         <input id="fName" type="text">
 
         <label for="lName" class="col-lg-2 control-label">Last Name</label>
@@ -32,10 +47,54 @@
         <label for="age" class="col-lg-2 control-label">Serial Number</label>
         <input id="age" type="text">
 
-        <button id="button">Update Item</button>
+		<button id="button">Update Item</button>-->
+		
+<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg-010.jpg');">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+				<form class="login100-form validate-form">
+					<span class="login100-form-title p-b-49">
+						<img src="images/sd.jpg" width="350" height="60">
 
-    </div>
+						<br>
+						<div class="label-input100bykritanu" id="countIns"></div>
+						<div class="label-input100bykritanu"  id="instructor"></div>
+						<p style="font-size:10px"><div class="label-input100bykritanu" id="insTrans" ></div></p>
 
+
+					</span>
+					<div class="wrap-input100 validate-input m-b-23" data-validate = "Retailer detail required">
+						<span class="label-input100">Retailer Detail</span>
+						<input class="input100" type="text" id="fName" name="fName" placeholder="Enter Retailer Detail">
+						<span class="focus-input100" data-symbol="&#10097;"></span>
+					</div>
+					<div class="wrap-input100 validate-input" data-validate="Batch number required">
+						<span class="label-input100">Batch Number</span>
+						<input class="input100" type="text" id="lName" name="lName" placeholder="Enter Batch Number">
+						<span class="focus-input100" data-symbol="&#10097;"></span>
+					</div>
+					<br>
+					<div class="wrap-input100 validate-input" data-validate="Seial number required">
+						<span class="label-input100">Serial Number</span>
+						<input class="input100" type="text" id="age" name="age" placeholder="Enter Serial Number">
+						<span class="focus-input100" data-symbol="&#10097;"></span>
+					</div>
+					<div class="text-right p-t-8 p-b-31">
+					</div>
+					
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<button id="button" type="button" class="login100-form-btn">Update Item</button>
+							<div class="login100-form-bgbtn"></div>
+						</div>
+					</div>
+						</span>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 
     <script>
@@ -172,36 +231,38 @@
 	}
 ]);
 
-    var Warehouse = WarehouseContract.at('0x8d658fad8e36e242bc45c5e06e003a29be980763');
+    var Warehouse = WarehouseContract.at('0x94983fa146d50d612ddecb921d122241f7d8ca85');
     console.log(Warehouse);
 
     var itemEvent = Warehouse.itemInfo({}, 'latest');
-
     itemEvent.watch(function(error, result){
             if (!error)
                 {
 					if (result.blockHash != $("#insTrans").html())
 					$("#loader").hide();
 					$("#insTrans").html('Block hash: ' +result.blockHash);
-                    $("#instructor").html(web3.toAscii(result.args.fName) + ' ' + web3.toAscii(result.args.lName) + ' (' + result.args.serial + ' Number)');
+                    $("#instructor").html(web3.toAscii(result.args.lName) + ' ' + result.args.serial  + ' (' + web3.toAscii(result.args.fName) + ')');
                 } else {
                     $("#loader").hide();
                     console.log(error);
                 }
 		});
-		
 		Warehouse.countItems((err,res) => {
 			if (res)
         	$("#countIns").html(res.c + ' Items'); 
 		})
 
     $("#button").click(function() {
-        $("#loader").show();
-        Warehouse.setItem(web3.eth.defaultAccount, $("#age").val(), $("#fName").val(),$("#lName").val(), (err, res) => {
+        //$("#loader").show();
+		console.log('Values init');
+		
+		console.log($("#age").val(), $("#fName").val(),$("#lName").val());
+
+        Warehouse.setItem(web3.eth.defaultAccount,$("#age").val(), $("#fName").val(),$("#lName").val(), (err, res) => {
             if (err) {
             $("#loader").hide();
             console.log('Trans Failed');
-        } 
+        }
         
     });
         
